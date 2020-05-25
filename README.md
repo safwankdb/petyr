@@ -23,7 +23,7 @@ print(rotate_and_move)
 ```
 
 ```python
-q = rotate_45 * p
+q = rotate_and_move * p
 print(q)
 ```
 ```
