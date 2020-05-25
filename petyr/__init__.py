@@ -88,9 +88,10 @@ class Affine():
     def scale(self, s_x=1, s_y=1):
         """
         Params:
-        s_x - translation in x
-        s_y - translation in y
+        s_x - scale factor in x
+        s_y - scale factor in y
         """
+        assert s_x * s_y != 0, "Scale factors should be non zero"
         self.M[0,:] *= s_x
         self.M[1,:] *= s_y
         return self
@@ -132,6 +133,6 @@ class Affine():
         '''
         if not self.is_degenerate():
             raise ValueError("Non Invertible Matrix")
-        self.M = np.linalg.inv(self.M)
-        return self
+        M = np.linalg.inv(self.M)
+        return self.__class__(M)
 

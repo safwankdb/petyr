@@ -87,6 +87,20 @@ at.shear(10, 45)
  [1.    1.    0.   ]
  [0.    0.    1.   ]]
 ```
+### Inversion
+```python
+at = Affine()
+at.rotate(90).scale(2)
+at_inv = at.invert()
+at * at_inv
+```
+```
+3x3 Affine Transformation
+[[1. 0. 0.]
+ [0. 1. 0.]
+ [0. 0. 1.]]
+```
+
 ## Operation Chaining
 Mutiple operations can be chained together.
 ```python

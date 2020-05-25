@@ -1,0 +1,3 @@
+petyr.egg-info/*
+dist/*
+*.pyc
