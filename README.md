@@ -12,8 +12,8 @@ from petyr import Affine
 ## Applying Transformation
 ```python
 p = np.array([[0,0],[1,0],[1,1],[0,1]]).T
-rotate_45 = Affine().rotate(90).translate(2,1)
-print(rotate_45)
+rotate_and_move = Affine().rotate(90).translate(2,1)
+print(rotate_and_move)
 ```
 ```
 3x3 Affine Transformation
