@@ -9,6 +9,9 @@ setuptools.setup(
     author="Mohd Safwam",
     author_email="kdbeatbox@gmail.com",
     description="2D Geometric Transforms",
+    install_requires=[
+          'numpy',
+      ],
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/safwankdb/petyr",
