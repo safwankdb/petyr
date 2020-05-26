@@ -26,7 +26,7 @@ class Affine:
     def from_points(cls, src, dst):
         '''
         Params:
-        src - source points. 2xN array [x1, y1; x2, y2; ...]
+        src - source points. Nx2 array [x1, y1; x2, y2; ...]
         dst - destination points. same shape as src
         '''
         assert src.shape == dst.shape, "src and dst should have same shape"
