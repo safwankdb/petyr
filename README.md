@@ -2,14 +2,15 @@
 
 Affine and Projective transformations for Python 3. Fast and chainable operations.
 
-## Install
+## Installation
 ```bash
 pip3 install petyr
 ```
+## Usage
 ```python
 from petyr import Affine
 ```
-## Applying Transformation
+### Applying Transformation
 ```python
 p = np.array([[0,0],[1,0],[1,1],[0,1]])
 rotate_and_move = Affine().rotate(90).translate(2,1)
@@ -32,9 +33,9 @@ print(q)
  [1. 2.]
  [1. 1.]]
 ```
-## Finding Transformation
+### Finding Transformation
 ```python
-Affine.from_points(p,q)
+Affine.from_points(p, q)
 ```
 ```
 Affine(
@@ -43,9 +44,9 @@ Affine(
  [ 0.  0.  1.]])
 ```
 
-## Basic Operations
+### Basic Operations
 
-### Translation
+#### Translation
 ```python
 at = Affine()
 at.translate(1, 3)
@@ -56,7 +57,7 @@ Affine(
  [0. 1. 3.]
  [0. 0. 1.]])
 ```
-### Scaling
+#### Scaling
 ```python
 at = Affine()
 at.scale(1.05, 2)
@@ -67,7 +68,10 @@ Affine(
  [0.   2.   0.  ]
  [0.   0.   1.  ]])
  ```
- ### Rotation
+Reflection about axis can be achieved by using negative scaling factors.
+
+#### Rotation
+Use the ```degrees``` flag to switch between degrees and radians.
  ```python
 at = Affine()
 at.rotate(45, degrees=True)
@@ -78,7 +82,8 @@ Affine(
  [ 0.707  0.707  0.   ]
  [ 0.     0.     1.   ]])
 ```
-### Shearing
+#### Shearing
+Use the ```degrees``` flag to switch between degrees and radians.
 ```python
 at = Affine()
 at.shear(10, 45)
@@ -89,7 +94,7 @@ Affine(
  [1.    1.    0.   ]
  [0.    0.    1.   ]])
 ```
-### Inversion
+#### Inversion
 ```python
 at = Affine()
 at.rotate(90).scale(2)
@@ -102,8 +107,8 @@ Affine(
  [0. 1. 0.]
  [0. 0. 1.]])
 ```
-
-## Operation Chaining
+## Chaining
+### Chaining Operations
 Mutiple operations can be chained together.
 ```python
 at = Affine()
@@ -116,7 +121,9 @@ Affine(
  [ 2.     0.     4.   ]
  [ 0.     0.     1.   ]])
 ```
-Multiple transforms can be multiplied together.
+
+### Chaining Transforms
+Multiple transforms can be multiplied together. This is a **non-commutative** operation. Here b will be applied before a.
 ```python
 a = Affine()
 a.translate(2,3)
