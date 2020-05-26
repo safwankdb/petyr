@@ -14,6 +14,16 @@ class Transformation2D:
 
     def __repr__(self):
         return "Transformation2D(\n{})".format(self.M.round(3))
+    
+    @classmethod
+    def from_elements(cls, A):
+        '''
+        Params:
+        A - array of 9 numbers describing a general transform
+        '''
+        assert len(A) == 9, "A should have exactly 9 elements"
+        M = np.array(A).reshape(3, 3)
+        return cls(M)
 
     def __mul__(self, x):
         if isinstance(x, np.ndarray):
