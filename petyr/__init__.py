@@ -2,7 +2,7 @@
 
 import numpy as np
 
-class Affine():
+class Affine:
 
     def __init__(self, M=None):
         if M is None:
@@ -36,13 +36,16 @@ class Affine():
         Apply the transform
         
         Params:
-        x - 2xN array [x1, x2 ... ; y1, y2 ...]
+        x - Nx2 array [x1, y1; x2, y2; ...]
+
+        Returns:
+        y - Nx2 array [x1', y1'; x2', y2'; ...]
         '''
-        assert x.ndim==2 and x.shape[0]==2, "x should be 2xN array"
-        X = np.ones((3,x.shape[1]))
-        X[:2,:] = x
+        assert x.ndim==2 and x.shape[1]==2, "x should be an Nx2 array"
+        X = np.ones((3, x.shape[0]))
+        X[:2,:] = x.T
         y = self.M @ X
-        return y[:2,:]
+        return y[:2,:].T
 
     def from_elements(self, A):
         """
@@ -56,19 +59,19 @@ class Affine():
     def from_points(self, src, dst):
         '''
         Params:
-        src - source points. 2xN array [x1, x2 ... ; y1, y2 ...]
+        src - source points. 2xN array [x1, y1; x2, y2; ...]
         dst - destination points. same shape as src
         '''
         assert src.shape == dst.shape, "src and dst should have same shape"
-        assert src.shape[0] == 2, "src and dst should be 2*n arrays"
-        n = src.shape[1]
+        assert src.shape[1] == 2, "src and dst should be Nx2 arrays"
+        n = src.shape[0]
         x = np.ones((3, n))
-        x[:2,:] = src
+        x[:2,:] = src.T
         X = np.zeros((2*n, 6))
         for i in range(n):
             X[2*i,:3] = x[:,i]
             X[2*i+1,3:] = x[:,i]
-        dst = dst.T.reshape(2*n,1)
+        dst = dst.reshape(2*n,1)
         A = np.linalg.lstsq(X, dst, rcond=None)[0].reshape(2,3)
         self.M = np.vstack([A, [0,0,1]])
         return self
