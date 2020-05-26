@@ -1,6 +1,10 @@
 # petyr
 
 Affine transformations and Homography for Python 3. Fast and chainable operations. Produced matrix can be used with ```cv2.warpAffine``` and ```cv2.warpPerspective```.
+
+## Maitainers
+- [Mohd Safwan](https://github.com/safwankdb)
+
 ## Installation
 ```bash
 pip3 install petyr
