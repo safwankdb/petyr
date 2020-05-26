@@ -137,7 +137,7 @@ class Affine:
         '''
         Return the inverse transform
         '''
-        if not self.is_degenerate():
+        if self.is_degenerate():
             raise ValueError("Non Invertible Matrix")
         M = np.linalg.inv(self.M)
         return self.__class__(M)
