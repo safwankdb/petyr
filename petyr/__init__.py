@@ -32,6 +32,7 @@ class Affine:
         assert src.shape == dst.shape, "src and dst should have same shape"
         assert src.shape[1] == 2, "src and dst should be Nx2 arrays"
         n = src.shape[0]
+        assert n >= 3, "need atleast 3 non collinear points to compute"
         x = np.ones((3, n))
         x[:2, :] = src.T
         X = np.zeros((2*n, 6))
@@ -78,6 +79,13 @@ class Affine:
         X[:2, :] = x.T
         y = self.M @ X
         return y[:2, :].T
+    
+    def reset(self):
+        '''
+        Resets to the identity transform
+        '''
+        self.M = np.eye(3)
+        return self
 
     def translate(self, tx=0, ty=0):
         """
