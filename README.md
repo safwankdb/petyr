@@ -18,7 +18,7 @@ p = np.array([[0,0],[1,0],[1,1],[0,1]])
 rotate_and_move = Affine().rotate(90).translate(2,1)
 q = rotate_and_move * p
 
-pt = Homography().from_elements([1,0,0,0,1,0,0.1,0.2,1])
+pt = Homography.from_elements([1,0,0,0,1,0,0.1,0.2,1])
 r = pt * p
 ```
 ## Finding Transformation
