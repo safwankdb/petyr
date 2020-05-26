@@ -10,9 +10,39 @@ class Affine:
         else:
             self.M = M
         return
+
+    @classmethod
+    def from_elements(cls, A):
+        """
+        Params:
+        A - array of 6 numbers describing an affine transform
+        """
+        assert len(A) == 6, "A should have exactly 6 elements"
+        M = np.array(A+[0,0,1]).reshape(3,3)
+        return cls(M)
+    
+    @classmethod
+    def from_points(cls, src, dst):
+        '''
+        Params:
+        src - source points. 2xN array [x1, y1; x2, y2; ...]
+        dst - destination points. same shape as src
+        '''
+        assert src.shape == dst.shape, "src and dst should have same shape"
+        assert src.shape[1] == 2, "src and dst should be Nx2 arrays"
+        n = src.shape[0]
+        x = np.ones((3, n))
+        x[:2,:] = src.T
+        X = np.zeros((2*n, 6))
+        for i in range(n):
+            X[2*i,:3] = x[:,i]
+            X[2*i+1,3:] = x[:,i]
+        dst = dst.reshape(-1,1)
+        A = np.linalg.lstsq(X, dst, rcond=None)[0]
+        return cls.from_elements(list(A.ravel()))
     
     def __repr__(self):
-        return "Affine(\n" + str(self.M) + ')'
+        return "Affine(\n" + str(self.M.round(3)) + ')'
 
     def __mul__(self, x):
         if isinstance(x, np.ndarray):
@@ -46,35 +76,6 @@ class Affine:
         X[:2,:] = x.T
         y = self.M @ X
         return y[:2,:].T
-
-    def from_elements(self, A):
-        """
-        Params:
-        A - array of 6 numbers describing an affine transform
-        """
-        assert len(A) == 6, "A should have exactly 6 elements"
-        self.M = np.array(A+[0,0,1]).reshape(3,3)
-        return self
-    
-    def from_points(self, src, dst):
-        '''
-        Params:
-        src - source points. 2xN array [x1, y1; x2, y2; ...]
-        dst - destination points. same shape as src
-        '''
-        assert src.shape == dst.shape, "src and dst should have same shape"
-        assert src.shape[1] == 2, "src and dst should be Nx2 arrays"
-        n = src.shape[0]
-        x = np.ones((3, n))
-        x[:2,:] = src.T
-        X = np.zeros((2*n, 6))
-        for i in range(n):
-            X[2*i,:3] = x[:,i]
-            X[2*i+1,3:] = x[:,i]
-        dst = dst.reshape(2*n,1)
-        A = np.linalg.lstsq(X, dst, rcond=None)[0].reshape(2,3)
-        self.M = np.vstack([A, [0,0,1]])
-        return self
 
 
     
@@ -134,7 +135,7 @@ class Affine:
 
     def invert(self):
         '''
-        Inverses the transform
+        Return the inverse transform
         '''
         if not self.is_degenerate():
             raise ValueError("Non Invertible Matrix")
