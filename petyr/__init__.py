@@ -12,7 +12,7 @@ class Affine():
         return
     
     def __repr__(self):
-        return "3x3 Affine Transformation\n" + str(self.M.round(3))
+        return "Affine(\n" + str(self.M) + ')'
 
     def __mul__(self, x):
         if isinstance(x, np.ndarray):
@@ -102,7 +102,7 @@ class Affine():
         theta - angle to rotate anti-clockwise by in degrees
         '''
         if degrees:
-            theta_x, theta_y = np.radians((theta_x, theta_y))
+            theta = np.radians(theta)
         c = np.cos(theta)
         s = np.sin(theta)
         M = np.eye(3)
