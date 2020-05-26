@@ -23,13 +23,13 @@ class Affine():
         else:
             raise NotImplementedError("Send a PR at the github repo if necessary")
 
-    def get_det(self):
-        self.det = np.linalg.det(self.M[:2,:2])
-        return self.det
+    def det(self):
+        det = np.linalg.det(self.M[:2,:2])
+        return det
 
     def is_degenerate(self):
-        self.get_det()
-        return self.det > 0
+        det = self.det()
+        return det == 0
 
     def apply(self, x):
         '''
