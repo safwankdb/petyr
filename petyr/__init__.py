@@ -96,12 +96,13 @@ class Affine():
         self.M[1,:] *= s_y
         return self
 
-    def rotate(self, theta):
+    def rotate(self, theta, degrees=True):
         '''
         Params:
         theta - angle to rotate anti-clockwise by in degrees
         '''
-        theta *= np.pi / 180
+        if degrees:
+            theta_x, theta_y = np.radians((theta_x, theta_y))
         c = np.cos(theta)
         s = np.sin(theta)
         M = np.eye(3)
@@ -112,13 +113,14 @@ class Affine():
         self.M = M @ self.M
         return self
     
-    def shear(self, theta_x=0, theta_y=0):
+    def shear(self, theta_x=0, theta_y=0, degrees=True):
         '''
         Params:
-        theta - shearing angle with y axis in degrees
+        theta_x - shearing angle with y axis
+        theta_y - shearing angle with x axis
         '''
-        theta_x *= np.pi / 180
-        theta_y *= np.pi / 180
+        if degrees:
+            theta_x, theta_y = np.radians((theta_x, theta_y))
         M = np.eye(3)
         M[0,0] = 1
         M[0,1] = np.tan(theta_x)
