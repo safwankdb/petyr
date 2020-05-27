@@ -72,6 +72,9 @@ class TestTransformation2D(unittest.TestCase):
         a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
         b = a * ~a
         np.testing.assert_array_almost_equal(b.M, np.eye(3))
+        
+        a = tf2d(np.arange(9).reshape(3,3))
+        self.assertRaises(ValueError, a.invert)
 
     def test_reset(self):
         a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
@@ -82,3 +85,11 @@ class TestTransformation2D(unittest.TestCase):
         a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
         b = a.copy()
         np.testing.assert_array_almost_equal(a.M, b.M)
+    
+    def test_det(self):
+        a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
+        self.assertEqual(a.det(), 6)
+    
+    def test_is_degenerate(self):
+        a = tf2d(np.arange(9).reshape(3,3))
+        self.assertEqual(True, a.is_degenerate())
