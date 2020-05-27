@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="petyr",
-    version="0.0.6",
+    version="0.0.7",
     author="Mohd Safwan",
     author_email="kdbeatbox@gmail.com",
     description="2D Homography and Affine Transformations for Python",
