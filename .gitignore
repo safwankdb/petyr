@@ -2,4 +2,4 @@ petyr.egg-info/*
 dist/*
 petyr/__pycache__/*
 petyr/dev
-test/__pycache__/*
+tests/__pycache__/*
