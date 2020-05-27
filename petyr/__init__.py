@@ -237,11 +237,6 @@ class Homography(Transformation2D):
         x1[:, :2] = src
         x2 = dst.reshape(2*n, 1)
         P = np.zeros((2*n, 9))
-        # for i in range(n):
-        #     P[2*i, :3] = -x1[i, :]
-        #     P[2*i, 6:] = x1[i, :]
-        #     P[2*i+1, 3:6] = -x1[i, :]
-        #     P[2*i+1, 6:] = x1[i, :]
         r = np.arange(n)
         P[2*r,:3] = -x1
         P[2*r,6:] =  x1
