@@ -10,11 +10,12 @@ class Transformation2D:
         if M is None:
             self.M = np.eye(3)
         else:
+            M = M.copy()
             self.M = M / M[2, 2]
 
     def __repr__(self):
         return "Transformation2D(\n{})".format(self.M.round(3))
-    
+
     @classmethod
     def from_elements(cls, A):
         '''
@@ -24,6 +25,9 @@ class Transformation2D:
         assert len(A) == 9, "A should have exactly 9 elements"
         M = np.array(A).reshape(3, 3)
         return cls(M)
+
+    def copy(self):
+        return self.__class__(self.M)
 
     def __mul__(self, x):
         if isinstance(x, np.ndarray):
