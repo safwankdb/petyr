@@ -60,7 +60,7 @@ class TestTransformation2D(unittest.TestCase):
         q = a * p
         r = np.array([[2., 3.], [2., 0.], [0., 3.]])
         np.testing.assert_array_almost_equal(r, q)
-    
+
     def test_invert(self):
         a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
         b = a * a.invert()
@@ -68,3 +68,12 @@ class TestTransformation2D(unittest.TestCase):
         a = tf2d.from_elements([0]*8+[1])
         self.assertRaises(ValueError, tf2d.invert, a)
 
+    def test_reset(self):
+        a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
+        a.reset()
+        np.testing.assert_array_almost_equal(a.M, np.eye(3))
+
+    def test_copy(self):
+        a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
+        b = a.copy()
+        np.testing.assert_array_almost_equal(a.M, b.M)
