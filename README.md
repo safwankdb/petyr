@@ -79,6 +79,9 @@ python3 -m unittest -v
 - [Mohd Safwan](https://github.com/safwankdb)
 
 ## TODO
-- Add unit tests for ```Affine``` and ```Homography``` classes as well.
-- Generate complete documentation.
-- Move documentation to somwhere other than README.
+- [x] Implement ```petyr.Homography```.
+- [x] Add unit tests.
+- [x] Vectorize ```from_points```.
+- [x] Add unit tests for ```Affine``` and ```Homography``` classes as well.
+- [ ] Generate complete documentation.
+- [ ] Move documentation to somwhere other than README.
