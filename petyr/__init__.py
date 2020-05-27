@@ -8,17 +8,17 @@ class Transformation2D:
 
     def __init__(self, M=None):
         if M is None:
-            self.M = np.eye(3)
+            self._M = np.eye(3)
         else:
             if type(M) is not np.ndarray:
                 raise TypeError("Input a 3x3 numpy array")
             if M.shape != (3, 3):
                 raise ValueError("Input a 3x3 numpy array")
             M = M.copy()
-            self.M = M / M[2, 2]
+            self._M = M / M[2, 2]
 
     def __repr__(self):
-        return "Transformation2D(\n{})".format(self.M.round(3))
+        return "Transformation2D(\n{})".format(self._M.round(3))
 
     @classmethod
     def from_elements(cls, *args):
@@ -32,13 +32,13 @@ class Transformation2D:
         return cls(M)
 
     def copy(self):
-        return self.__class__(self.M)
+        return self.__class__(self._M)
 
     def __mul__(self, x):
         if isinstance(x, np.ndarray):
             return self.apply(x)
         elif isinstance(x, Transformation2D):
-            M = self.M @ x.M
+            M = self._M @ x._M
             return self.__class__(M)
         else:
             raise NotImplementedError(
@@ -48,12 +48,15 @@ class Transformation2D:
         return self.invert()
 
     def det(self):
-        det = np.linalg.det(self.M)
+        det = np.linalg.det(self._M)
         return det
 
     def is_degenerate(self):
         det = self.det()
         return det == 0
+
+    def numpy(self):
+        return self._M.copy()
 
     def apply(self, x):
         '''
@@ -68,7 +71,7 @@ class Transformation2D:
         assert x.ndim == 2 and x.shape[1] == 2, "x should be an Nx2 array"
         X = np.ones((3, x.shape[0]))
         X[:2, :] = x.T
-        y = self.M @ X
+        y = self._M @ X
         y = y / y[2:, :]
         return y[:2, :].T
 
@@ -76,7 +79,7 @@ class Transformation2D:
         '''
         Resets to the identity transform
         '''
-        self.M = np.eye(3)
+        self._M = np.eye(3)
         return self
 
     def translate(self, t_x=0, t_y=0):
@@ -88,7 +91,7 @@ class Transformation2D:
         M = np.eye(3)
         M[0, 2] = t_x
         M[1, 2] = t_y
-        self.M = M @ self.M
+        self._M = M @ self._M
         return self
 
     def scale(self, s_x=1, s_y=1):
@@ -102,7 +105,7 @@ class Transformation2D:
         M = np.eye(3)
         M[0, 0] = s_x
         M[1, 1] = s_y
-        self.M = M @ self.M
+        self._M = M @ self._M
         return self
 
     def rotate(self, theta, degrees=True):
@@ -120,7 +123,7 @@ class Transformation2D:
         M[0, 1] = -s
         M[1, 0] = s
         M[1, 1] = c
-        self.M = M @ self.M
+        self._M = M @ self._M
         return self
 
     def shear(self, theta_x=0, theta_y=0, degrees=True):
@@ -136,7 +139,7 @@ class Transformation2D:
         M[0, 1] = np.tan(theta_x)
         M[1, 0] = np.tan(theta_y)
         M[1, 1] = 1
-        self.M = M @ self.M
+        self._M = M @ self._M
         return self
 
     def invert(self):
@@ -145,7 +148,7 @@ class Transformation2D:
         '''
         if self.is_degenerate():
             raise ValueError("Non Invertible Matrix")
-        M = np.linalg.inv(self.M)
+        M = np.linalg.inv(self._M)
         return self.__class__(M)
 
 
@@ -158,13 +161,13 @@ class Affine(Transformation2D):
         super().__init__(M)
 
     def __repr__(self):
-        return "Affine(\n{})".format(self.M.round(3))
+        return "Affine(\n{})".format(self._M.round(3))
 
     def __mul__(self, x):
         if isinstance(x, np.ndarray):
             return self.apply(x)
         elif isinstance(x, Transformation2D):
-            M = self.M @ x.M
+            M = self._M @ x._M
             return type(x)(M)
         else:
             raise NotImplementedError(
@@ -211,7 +214,7 @@ class Homography(Transformation2D):
         super().__init__(M)
 
     def __repr__(self):
-        return "Homography(\n{})".format(self.M.round(3))
+        return "Homography(\n{})".format(self._M.round(3))
 
     @classmethod
     def from_elements(cls, *args):
