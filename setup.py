@@ -10,8 +10,8 @@ setuptools.setup(
     author_email="kdbeatbox@gmail.com",
     description="2D Homography and Affine Transformations for Python",
     install_requires=[
-          'numpy',
-      ],
+        'numpy',
+    ],
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/safwankdb/petyr",
