@@ -65,8 +65,13 @@ class TestTransformation2D(unittest.TestCase):
         a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
         b = a * a.invert()
         np.testing.assert_array_almost_equal(b.M, np.eye(3))
+
         a = tf2d.from_elements([0]*8+[1])
         self.assertRaises(ValueError, tf2d.invert, a)
+
+        a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
+        b = a * ~a
+        np.testing.assert_array_almost_equal(b.M, np.eye(3))
 
     def test_reset(self):
         a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
