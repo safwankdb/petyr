@@ -12,7 +12,7 @@ class Transformation2D:
         else:
             if type(M) is not np.ndarray:
                 raise TypeError("Input a 3x3 numpy array")
-            if M.shape != (3,3):
+            if M.shape != (3, 3):
                 raise ValueError("Input a 3x3 numpy array")
             M = M.copy()
             self.M = M / M[2, 2]
@@ -43,7 +43,7 @@ class Transformation2D:
         else:
             raise NotImplementedError(
                 "Send a PR at the github repo if necessary")
-    
+
     def __invert__(self):
         return self.invert()
 
@@ -241,10 +241,10 @@ class Homography(Transformation2D):
         x2 = dst.reshape(2*n, 1)
         P = np.zeros((2*n, 9))
         r = np.arange(n)
-        P[2*r,:3] = -x1
-        P[2*r,6:] =  x1
-        P[2*r+1,3:6] = -x1
-        P[2*r+1, 6:] =  x1
+        P[2*r, :3] = -x1
+        P[2*r, 6:] = x1
+        P[2*r+1, 3:6] = -x1
+        P[2*r+1, 6:] = x1
         P[:, 6:] *= x2
         _, _, vh = np.linalg.svd(P)
         A = vh[-1, :].reshape(3, 3)
