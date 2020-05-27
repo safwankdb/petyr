@@ -21,11 +21,12 @@ class Transformation2D:
         return "Transformation2D(\n{})".format(self.M.round(3))
 
     @classmethod
-    def from_elements(cls, A):
+    def from_elements(cls, *args):
         '''
         Params:
         A - array of 9 numbers describing a general transform
         '''
+        A = np.asarray(args[0]) if len(args) == 1 else np.asarray(args)
         assert len(A) == 9, "A should have exactly 9 elements"
         M = np.array(A).reshape(3, 3)
         return cls(M)
@@ -150,7 +151,7 @@ class Transformation2D:
 
 class Affine(Transformation2D):
     '''
-    3x3 Affine
+    3x3 Affine Transform
     '''
 
     def __init__(self, M=None):
@@ -170,11 +171,12 @@ class Affine(Transformation2D):
                 "Send a PR at the github repo if necessary")
 
     @classmethod
-    def from_elements(cls, A):
+    def from_elements(cls, *args):
         '''
         Params:
         A - array of 6 numbers describing an affine transform
         '''
+        A = np.asarray(args[0]) if len(args) == 1 else np.asarray(args)
         assert len(A) == 6, "A should have exactly 6 elements"
         M = np.concatenate([A, [0, 0, 1]]).reshape(3, 3)
         return cls(M)
@@ -212,11 +214,12 @@ class Homography(Transformation2D):
         return "Homography(\n{})".format(self.M.round(3))
 
     @classmethod
-    def from_elements(cls, H):
+    def from_elements(cls, *args):
         '''
         Params:
         H - array of 8 numbers describing an affine transform
         '''
+        H = np.asarray(args[0]) if len(args) == 1 else np.asarray(args)
         assert len(H) == 8, "H should have exactly 8 elements"
         M = np.concatenate([H, [1]]).reshape(3, 3)
         return cls(M)
