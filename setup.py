@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="petyr",
-    version="0.0.4",
+    version="0.0.5",
     author="Mohd Safwam",
     author_email="kdbeatbox@gmail.com",
     description="2D Affine and Projective Transformations",
