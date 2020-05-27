@@ -10,6 +10,10 @@ class Transformation2D:
         if M is None:
             self.M = np.eye(3)
         else:
+            if type(M) is not np.ndarray:
+                raise TypeError("Input a 3x3 numpy array")
+            if M.shape != (3,3):
+                raise ValueError("Input a 3x3 numpy array")
             M = M.copy()
             self.M = M / M[2, 2]
 
