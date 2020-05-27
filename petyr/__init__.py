@@ -42,6 +42,9 @@ class Transformation2D:
         else:
             raise NotImplementedError(
                 "Send a PR at the github repo if necessary")
+    
+    def __invert__(self):
+        return self.invert()
 
     def det(self):
         det = np.linalg.det(self.M)
@@ -159,15 +162,9 @@ class Affine(Transformation2D):
     def __mul__(self, x):
         if isinstance(x, np.ndarray):
             return self.apply(x)
-        elif isinstance(x, Affine):
-            M = self.M @ x.M
-            return Affine(M)
-        elif isinstance(x, Homography):
-            M = self.M @ x.M
-            return Homography(M)
         elif isinstance(x, Transformation2D):
             M = self.M @ x.M
-            return Transformation2D(M)
+            return type(x)(M)
         else:
             raise NotImplementedError(
                 "Send a PR at the github repo if necessary")
@@ -179,7 +176,7 @@ class Affine(Transformation2D):
         A - array of 6 numbers describing an affine transform
         '''
         assert len(A) == 6, "A should have exactly 6 elements"
-        M = np.array(A+[0, 0, 1]).reshape(3, 3)
+        M = np.concatenate([A, [0, 0, 1]]).reshape(3, 3)
         return cls(M)
 
     @classmethod
@@ -193,12 +190,11 @@ class Affine(Transformation2D):
         assert src.shape[1] == 2, "src and dst should be Nx2 arrays"
         n = src.shape[0]
         assert n >= 3, "need atleast 3 non collinear points to compute"
-        x = np.ones((3, n))
-        x[:2, :] = src.T
+        x = np.hstack([src, np.ones((n, 1))])
         X = np.zeros((2*n, 6))
-        for i in range(n):
-            X[2*i, :3] = x[:, i]
-            X[2*i+1, 3:] = x[:, i]
+        r = np.arange(n)
+        X[2*r, :3] = x
+        X[2*r+1, 3:] = x
         dst = dst.reshape(-1, 1)
         A = np.linalg.lstsq(X, dst, rcond=None)[0]
         return cls.from_elements(list(A.ravel()))
@@ -222,7 +218,7 @@ class Homography(Transformation2D):
         H - array of 8 numbers describing an affine transform
         '''
         assert len(H) == 8, "H should have exactly 8 elements"
-        M = np.array(H+[1]).reshape(3, 3)
+        M = np.concatenate([H, [1]]).reshape(3, 3)
         return cls(M)
 
     @classmethod
@@ -241,11 +237,16 @@ class Homography(Transformation2D):
         x1[:, :2] = src
         x2 = dst.reshape(2*n, 1)
         P = np.zeros((2*n, 9))
-        for i in range(n):
-            P[2*i, :3] = -x1[i, :]
-            P[2*i, 6:] = x1[i, :]
-            P[2*i+1, 3:6] = -x1[i, :]
-            P[2*i+1, 6:] = x1[i, :]
+        # for i in range(n):
+        #     P[2*i, :3] = -x1[i, :]
+        #     P[2*i, 6:] = x1[i, :]
+        #     P[2*i+1, 3:6] = -x1[i, :]
+        #     P[2*i+1, 6:] = x1[i, :]
+        r = np.arange(n)
+        P[2*r,:3] = -x1
+        P[2*r,6:] =  x1
+        P[2*r+1,3:6] = -x1
+        P[2*r+1, 6:] =  x1
         P[:, 6:] *= x2
         _, _, vh = np.linalg.svd(P)
         A = vh[-1, :].reshape(3, 3)
