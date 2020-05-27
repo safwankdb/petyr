@@ -2,9 +2,6 @@
 
 Affine transformations and Homography for Python 3. Fast and chainable operations. Produced matrix can be used with ```cv2.warpAffine``` and ```cv2.warpPerspective```.
 
-## Maitainers
-- [Mohd Safwan](https://github.com/safwankdb)
-
 ## Installation
 ```bash
 pip3 install petyr
@@ -69,6 +66,10 @@ b.scale(4,5)
 c = a * b
 ```
 
+## Maitainers
+- [Mohd Safwan](https://github.com/safwankdb)
+
 ## TODO
+- Add unit tests for ```Affine``` and ```Homography``` classes as well.
 - Generate complete documentation.
 - Move documentation to somwhere other than README.

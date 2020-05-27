@@ -48,3 +48,23 @@ class TestTransformation2D(unittest.TestCase):
         self.assertEqual(np.arctan(b.M[0, 1]), theta_x)
         self.assertEqual(np.arctan(b.M[1, 0]), theta_y)
 
+    def test_mul(self):
+        a = tf2d().rotate(30).translate(2, 2)
+        b = tf2d().shear(10, 20).scale(1, 2)
+        c = a * b
+        np.testing.assert_array_almost_equal(c.M, a.M @ b.M)
+
+    def test_apply(self):
+        p = np.array([[0, 0], [0, 1], [1, 0]])
+        a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
+        q = a * p
+        r = np.array([[2., 3.], [2., 0.], [0., 3.]])
+        np.testing.assert_array_almost_equal(r, q)
+    
+    def test_invert(self):
+        a = tf2d().rotate(180).translate(1, 1).scale(2, 3)
+        b = a * a.invert()
+        np.testing.assert_array_almost_equal(b.M, np.eye(3))
+        a = tf2d.from_elements([0]*8+[1])
+        self.assertRaises(ValueError, tf2d.invert, a)
+
