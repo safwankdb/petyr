@@ -1,4 +1,4 @@
-from petyr import Affine, Transformation2D, Homography
+from petyr import Affine, Transformation2D, Homography, Similarity
 import numpy as np
 import unittest
 
@@ -20,14 +20,22 @@ class TestAffine(unittest.TestCase):
 
     def test_mul(self):
         a = Affine().rotate(30).translate(2, 2)
+
+        b = Similarity().scale(1.5).rotate(10).translate(1,2)
+        c = a * b
+        self.assertIsInstance(c, Affine)
+        np.testing.assert_array_almost_equal(c.numpy(), a.numpy() @ b.numpy())
+        
         b = Affine().shear(10, 20).scale(1, 2)
         c = a * b
         self.assertIsInstance(c, Affine)
         np.testing.assert_array_almost_equal(c.numpy(), a.numpy() @ b.numpy())
+        
         b = Transformation2D().shear(10, 20).scale(1, 2)
         c = a * b
         self.assertEqual(type(c), Transformation2D)
         np.testing.assert_array_almost_equal(c.numpy(), a.numpy() @ b.numpy())
+        
         b = Homography().shear(10, 20).scale(1, 2)
         c = a * b
         self.assertIsInstance(c, Homography)

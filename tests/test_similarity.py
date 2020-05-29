@@ -3,14 +3,14 @@ import numpy as np
 import unittest
 
 
-class TestAffine(unittest.TestCase):
+class TestSimilarity(unittest.TestCase):
 
-    # def test_from_points(self):
-    #     p = np.random.rand(10, 2)
-    #     a = Affine().translate(2, 3).rotate(45)
-    #     q = a * p
-    #     b = Affine.from_points(p, q)
-    #     np.testing.assert_array_almost_equal(a.numpy(), b.numpy())
+    def test_from_points(self):
+        p = np.random.rand(10, 2)
+        a = Similarity().translate(2, 3).rotate(45).scale(2)
+        q = a * p
+        b = Similarity.from_points(p, q)
+        np.testing.assert_array_almost_equal(a.numpy(), b.numpy())
 
     def test_from_elements(self):
         A = [1, 2, 3, 4]
@@ -32,3 +32,6 @@ class TestAffine(unittest.TestCase):
         c = a * b
         self.assertIsInstance(c, Homography)
         np.testing.assert_array_almost_equal(c.numpy(), a.numpy() @ b.numpy())
+    
+    def test_shear(self):
+        self.assertRaises(AttributeError, Similarity.shear, 4)
