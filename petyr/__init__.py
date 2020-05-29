@@ -18,7 +18,7 @@ class Transformation2D:
             self._M = M / M[2, 2]
 
     def __repr__(self):
-        return "Transformation2D(\n{})".format(self._M.round(3))
+        return "{}(\n{})".format(type(self).__name__, self._M.round(3))
 
     @classmethod
     def from_elements(cls, *args):
@@ -39,7 +39,7 @@ class Transformation2D:
             return self.apply(x)
         elif isinstance(x, Transformation2D):
             M = self._M @ x._M
-            return self.__class__(M)
+            return type(x)(M)
         else:
             raise NotImplementedError(
                 "Send a PR at the github repo if necessary")
@@ -157,22 +157,6 @@ class Affine(Transformation2D):
     3x3 Affine Transform
     '''
 
-    def __init__(self, M=None):
-        super().__init__(M)
-
-    def __repr__(self):
-        return "Affine(\n{})".format(self._M.round(3))
-
-    def __mul__(self, x):
-        if isinstance(x, np.ndarray):
-            return self.apply(x)
-        elif isinstance(x, Transformation2D):
-            M = self._M @ x._M
-            return type(x)(M)
-        else:
-            raise NotImplementedError(
-                "Send a PR at the github repo if necessary")
-
     @classmethod
     def from_elements(cls, *args):
         '''
@@ -209,12 +193,6 @@ class Homography(Transformation2D):
     '''
     3x3 Homography
     '''
-
-    def __init__(self, M=None):
-        super().__init__(M)
-
-    def __repr__(self):
-        return "Homography(\n{})".format(self._M.round(3))
 
     @classmethod
     def from_elements(cls, *args):
