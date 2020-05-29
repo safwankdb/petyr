@@ -26,7 +26,7 @@ class TestHomography(unittest.TestCase):
         np.testing.assert_array_almost_equal(c.numpy(), a.numpy() @ b.numpy())
         b = Transformation2D().shear(10, 20).scale(1, 2)
         c = a * b
-        self.assertIsInstance(c, Homography)
+        self.assertIsInstance(c, Transformation2D)
         np.testing.assert_array_almost_equal(c.numpy(), a.numpy() @ b.numpy())
         b = Homography().shear(10, 20).scale(1, 2)
         c = a * b
