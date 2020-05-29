@@ -166,6 +166,19 @@ class Similarity(Transformation2D):
         else:
             raise NotImplementedError(
                 "Send a PR at the github repo if necessary")
+    
+    @classmethod
+    def from_elements(cls, *args):
+        '''
+        Params:
+        A - array of 4 numbers describing a similarity transform
+        '''
+        A = np.asarray(args[0]) if len(args) == 1 else np.asarray(args)
+        assert len(A) == 4, "*args should have exactly 4 elements"
+        a, b, c, d = A
+        M = np.array([a,-b,c,b,a,d,0,0,1]).reshape(3, 3)
+        return cls(M)
+
 
 
 class Affine(Transformation2D):
