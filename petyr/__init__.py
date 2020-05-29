@@ -166,7 +166,7 @@ class Similarity(Transformation2D):
         else:
             raise NotImplementedError(
                 "Send a PR at the github repo if necessary")
-    
+
     @classmethod
     def from_elements(cls, *args):
         '''
@@ -176,9 +176,46 @@ class Similarity(Transformation2D):
         A = np.asarray(args[0]) if len(args) == 1 else np.asarray(args)
         assert len(A) == 4, "*args should have exactly 4 elements"
         a, b, c, d = A
-        M = np.array([a,-b,c,b,a,d,0,0,1]).reshape(3, 3)
+        M = np.array([a, -b, c, b, a, d, 0, 0, 1]).reshape(3, 3)
         return cls(M)
 
+    @classmethod
+    def from_points(cls, src, dst):
+        '''
+        Params:
+        src - source points. Nx2 array [x1, y1; x2, y2; ...]
+        dst - destination points. same shape as src
+        '''
+        assert src.shape == dst.shape, "src and dst should have same shape"
+        assert src.shape[1] == 2, "src and dst should be Nx2 arrays"
+        n = src.shape[0]
+        assert n >= 2, "need atleast 2 points to compute"
+        x1 = np.hstack([src[:, :1], -src[:, 1:], np.ones((n, 1))])
+        x2 = np.hstack([src, np.ones((n, 1))])
+        X = np.zeros((2*n, 4))
+        r = np.arange(n)
+        X[2*r, 1:] = x1
+        X[2*r+1, :3] = x2[:, ::-1]
+        dst = dst.reshape(-1, 1)
+        A = np.linalg.lstsq(X, dst, rcond=None)[0].ravel()
+        d, a, b, c = A
+        return cls.from_elements(a, b, c, d)
+
+    def scale(self, s):
+        '''
+        Uniform Scaling
+        Scales with factors s in both x and y.
+        Params:
+        s - scale factor
+        '''
+        return super().scale(s, s)
+
+    def shear(self, *args):
+        '''
+        Raises Error
+        '''
+        raise AttributeError(
+            "Similarity Transform does not involve shearing, Use petyr.Affine instead")
 
 
 class Affine(Transformation2D):
@@ -235,6 +272,7 @@ class Homography(Transformation2D):
     '''
     3x3 Homography
     '''
+
     def __mul__(self, x):
         if isinstance(x, np.ndarray):
             return self.apply(x)
