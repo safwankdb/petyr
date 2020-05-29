@@ -39,7 +39,7 @@ class Transformation2D:
             return self.apply(x)
         elif isinstance(x, Transformation2D):
             M = self._M @ x._M
-            return type(x)(M)
+            return self.__class__(M)
         else:
             raise NotImplementedError(
                 "Send a PR at the github repo if necessary")
@@ -152,10 +152,35 @@ class Transformation2D:
         return self.__class__(M)
 
 
+class Similarity(Transformation2D):
+    '''
+    3x3 Similarity Transform
+    '''
+    def __mul__(self, x):
+        if isinstance(x, np.ndarray):
+            return self.apply(x)
+        elif isinstance(x, Transformation2D):
+            M = self._M @ x._M
+            return type(x)(M)
+        else:
+            raise NotImplementedError(
+                "Send a PR at the github repo if necessary")
+
+
 class Affine(Transformation2D):
     '''
     3x3 Affine Transform
     '''
+
+    def __mul__(self, x):
+        if isinstance(x, np.ndarray):
+            return self.apply(x)
+        elif isinstance(x, Transformation2D):
+            M = self._M @ x._M
+            return type(x)(M)
+        else:
+            raise NotImplementedError(
+                "Send a PR at the github repo if necessary")
 
     @classmethod
     def from_elements(cls, *args):
