@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="petyr",
-    version="0.0.7",
+    version="0.0.8",
     author="Mohd Safwan",
     author_email="kdbeatbox@gmail.com",
-    description="2D Homography and Affine Transformations for Python",
+    description="Affine, Similarity Transformations and Homography for Python",
     install_requires=[
         'numpy',
     ],

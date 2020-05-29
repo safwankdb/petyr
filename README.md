@@ -1,7 +1,7 @@
 # petyr
 [![Build Status](https://travis-ci.org/safwankdb/petyr.svg?branch=master)](https://travis-ci.org/safwankdb/petyr)       [![codecov](https://codecov.io/gh/safwankdb/petyr/branch/master/graph/badge.svg)](https://codecov.io/gh/safwankdb/petyr)
 
-Affine, Similarity Transformations and Homography for Python 3. Fast and chainable inplace operations. Produced matrix can be used with ```cv2.warpAffine``` and ```cv2.warpPerspective```.
+Affine, Similarity Transformations and Homography for Python. Fast and chainable inplace operations. Produced matrix can be used with ```cv2.warpAffine``` and ```cv2.warpPerspective```.
 
 ## Installation
 For stable release
