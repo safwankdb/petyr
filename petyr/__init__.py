@@ -197,8 +197,8 @@ class Similarity(Transformation2D):
         X[2*r, 1:] = x1
         X[2*r+1, :3] = x2[:, ::-1]
         dst = dst.reshape(-1, 1)
-        A = np.linalg.lstsq(X, dst, rcond=None)[0].ravel()
-        d, a, b, c = A
+        A = np.linalg.inv(X.T @ X) @ X.T @ dst
+        d, a, b, c = A.ravel()
         return cls.from_elements(a, b, c, d)
 
     def scale(self, s):
@@ -264,7 +264,7 @@ class Affine(Transformation2D):
         X[2*r, :3] = x
         X[2*r+1, 3:] = x
         dst = dst.reshape(-1, 1)
-        A = np.linalg.lstsq(X, dst, rcond=None)[0]
+        A = np.linalg.inv(X.T @ X) @ X.T @ dst
         return cls.from_elements(list(A.ravel()))
 
 
